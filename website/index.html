@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JAM KREIS LINZ — Offene Rhythmuskreise</title>
+  <meta name="description" content="Offene Rhythmuskreise in Linz. Keine Vorkenntnisse. Keine gemeinsame Sprache nötig. Nur Rhythmus und Körpersignale. Jeden letzten Samstag.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Anton&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --yellow: #f5e340;
+      --teal: #3db8a5;
+      --pink: #e8308a;
+      --cyan: #3fc8f0;
+      --dark: #1a1a2e;
+      --cream: #faf7f2;
+      --warm-black: #2c2c2c;
+      --green-line: #2ea88a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--warm-black);
+      background: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ========== FLOWING LINE SVG ========== */
+    .flowing-line {
+      position: absolute;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .flowing-line path {
+      fill: none;
+      stroke: var(--teal);
+      stroke-width: 3;
+      stroke-linecap: round;
+      opacity: 0.5;
+      stroke-dasharray: 2000;
+      stroke-dashoffset: 2000;
+      transition: stroke-dashoffset 2s ease;
+    }
+
+    .flowing-line.visible path {
+      stroke-dashoffset: 0;
+    }
+
+    /* ========== NAV ========== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s ease;
+      mix-blend-mode: difference;
+    }
+
+    nav.scrolled {
+      background: rgba(26, 26, 46, 0.95);
+      mix-blend-mode: normal;
+      backdrop-filter: blur(10px);
+      padding: 0.7rem 2rem;
+    }
+
+    nav .logo {
+      font-family: 'Anton', sans-serif;
+      font-size: 1rem;
+      color: white;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    nav .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+
+    nav .nav-links a:hover { opacity: 1; }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: white;
+      margin: 5px 0;
+      transition: all 0.3s;
+    }
+
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--dark);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+      filter: brightness(0.7) saturate(1.2);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(4rem, 12vw, 10rem);
+      line-height: 0.9;
+      color: white;
+      text-shadow: 4px 4px 0 var(--pink), 8px 8px 0 rgba(0,0,0,0.2);
+      margin-bottom: 1.5rem;
+      animation: titlePulse 4s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.01); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--yellow);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.5s forwards;
+    }
+
+    .hero-tagline {
+      font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+      color: rgba(255,255,255,0.8);
+      font-weight: 400;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.8s forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--teal);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.1s forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--pink);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(232, 48, 138, 0.3);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-indicator span {
+      display: block;
+      width: 24px;
+      height: 24px;
+      border-right: 2px solid var(--yellow);
+      border-bottom: 2px solid var(--yellow);
+      transform: rotate(45deg);
+      opacity: 0.6;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== QUICK STRIP ========== */
+    .quick-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      background: var(--dark);
+    }
+
+    .quick-card {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: white;
+      transition: all 0.3s;
+      cursor: default;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .quick-card:last-child { border-right: none; }
+
+    .quick-card:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .quick-card .icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .quick-card h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      color: var(--yellow);
+    }
+
+    .quick-card p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      line-height: 1.5;
+    }
+
+    /* ========== SECTIONS COMMON ========== */
+    section {
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Anton', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      line-height: 1;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title .accent { color: var(--pink); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== ABOUT ========== */
+    .about {
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      color: var(--warm-black);
+    }
+
+    .about-text .highlight {
+      background: linear-gradient(to right, var(--yellow) 0%, rgba(245, 227, 64, 0.3) 100%);
+      padding: 0 4px;
+      font-weight: 600;
+    }
+
+    .about-image {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s;
+    }
+
+    .about-image:hover img {
+      transform: scale(1.03);
+    }
+
+    .about-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 3px solid var(--teal);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    /* ========== QUOTE BREAK ========== */
+    .quote-break {
+      background: var(--teal);
+      padding: 5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-break::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .quote-break blockquote {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: white;
+      line-height: 1.2;
+      max-width: 800px;
+      margin: 0 auto 1rem;
+    }
+
+    .quote-break cite {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+    }
+
+    /* ========== HOW IT WORKS ========== */
+    .how-it-works {
+      background: white;
+    }
+
+    .phases-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .phase-card {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .phase-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .phase-number {
+      font-family: 'Anton', sans-serif;
+      font-size: 4rem;
+      color: var(--yellow);
+      line-height: 1;
+      opacity: 0.6;
+    }
+
+    .phase-card h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.3rem;
+      margin: 0.5rem 0;
+      color: var(--dark);
+    }
+
+    .phase-card .time {
+      font-size: 0.8rem;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-card p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .phase-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--teal);
+      font-size: 1.5rem;
+    }
+
+    /* ========== GALLERY ========== */
+    .gallery {
+      background: var(--dark);
+      padding: 5rem 1rem;
+    }
+
+    .gallery .section-label { color: var(--yellow); }
+    .gallery .section-title { color: white; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 250px;
+      gap: 8px;
+      margin-top: 3rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s, filter 0.5s;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+      filter: brightness(1.1) saturate(1.2);
+    }
+
+    .gallery-item.tall { grid-row: span 2; }
+    .gallery-item.wide { grid-column: span 2; }
+    .gallery-item.feature { grid-column: span 2; grid-row: span 2; }
+
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,26,46,0.4) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+
+    /* ========== ASHEVILLE ========== */
+    .asheville {
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    .asheville-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .asheville-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .stat-box {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .stat-box .number {
+      font-family: 'Anton', sans-serif;
+      font-size: 2.5rem;
+      color: var(--pink);
+      line-height: 1;
+    }
+
+    .stat-box .label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+    .asheville-image {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .asheville-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .asheville-badge {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      background: rgba(26,26,46,0.9);
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .asheville-badge .loc {
+      font-family: 'Anton', sans-serif;
+      font-size: 1rem;
+      color: var(--yellow);
+    }
+
+    .asheville-badge .desc {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    /* ========== PENTATONIC ========== */
+    .pentatonic {
+      background: var(--yellow);
+      padding: 5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pentatonic .section-title { color: var(--dark); }
+
+    .notes-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0 2rem;
+      flex-wrap: wrap;
+    }
+
+    .note-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Anton', sans-serif;
+      font-size: 1.8rem;
+      color: var(--dark);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .note-circle:hover {
+      transform: scale(1.15) rotate(-5deg);
+      background: var(--teal);
+      color: white;
+    }
+
+    .pentatonic-desc {
+      font-family: 'Lora', serif;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+      color: var(--dark);
+    }
+
+    .pentatonic-desc strong {
+      color: var(--pink);
+    }
+
+    /* ========== POSTER GALLERY ========== */
+    .posters {
+      background: white;
+      padding: 5rem 2rem;
+    }
+
+    .poster-scroll {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      padding: 2rem 0;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .poster-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .poster-scroll::-webkit-scrollbar-track {
+      background: var(--cream);
+      border-radius: 3px;
+    }
+
+    .poster-scroll::-webkit-scrollbar-thumb {
+      background: var(--teal);
+      border-radius: 3px;
+    }
+
+    .poster-item {
+      flex: 0 0 auto;
+      width: 400px;
+      scroll-snap-align: center;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      transition: transform 0.3s;
+    }
+
+    .poster-item:hover {
+      transform: scale(1.02);
+    }
+
+    .poster-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ========== DATES ========== */
+    .dates {
+      background: var(--dark);
+      color: white;
+    }
+
+    .dates .section-label { color: var(--cyan); }
+    .dates .section-title { color: white; }
+
+    .dates-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .date-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .date-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--teal);
+      transform: translateY(-3px);
+    }
+
+    .date-card.next {
+      border-color: var(--pink);
+      background: rgba(232, 48, 138, 0.1);
+    }
+
+    .date-card .month {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.6rem;
+      color: var(--yellow);
+    }
+
+    .date-card .day {
+      font-family: 'Anton', sans-serif;
+      font-size: 3rem;
+      color: white;
+      line-height: 1;
+      margin: 0.3rem 0;
+    }
+
+    .date-card .info {
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    .date-card .badge {
+      display: inline-block;
+      background: var(--pink);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      margin-top: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ========== FOR EVERYONE ========== */
+    .for-everyone {
+      background: var(--teal);
+      color: white;
+      text-align: center;
+      padding: 6rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .for-everyone .section-title {
+      color: white;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+    }
+
+    .for-everyone .sub {
+      font-family: 'Lora', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      max-width: 600px;
+      margin: 1.5rem auto 0;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .audience-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 2.5rem;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+
+    .pill:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.05);
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 4rem 2rem 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-brand .logo {
+      font-family: 'Anton', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      opacity: 0.6;
+      max-width: 350px;
+    }
+
+    .footer-col h4 {
+      font-family: 'Anton', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 1rem;
+    }
+
+    .footer-col a {
+      display: block;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .footer-col a:hover { color: var(--teal); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      opacity: 0.4;
+    }
+
+    .partner-logos {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .partner-logos span {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+
+    /* ========== DECORATIVE FLOWING LINE ========== */
+    .flow-decoration {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .flow-decoration svg {
+      position: absolute;
+      width: 120%;
+      left: -10%;
+    }
+
+    /* ========== IMAGE PARALLAX STRIPS ========== */
+    .image-strip {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-strip img {
+      width: 100%;
+      height: 130%;
+      object-fit: cover;
+      position: absolute;
+      top: -15%;
+      transition: transform 0.1s linear;
+    }
+
+    .image-strip .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--dark) 0%, transparent 30%, transparent 70%, var(--cream) 100%);
+      z-index: 2;
+    }
+
+    /* ========== MOBILE ========== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+
+      .nav-links.open {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(26,26,46,0.98);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        z-index: 99;
+      }
+
+      .nav-links.open a {
+        font-size: 1.5rem;
+        opacity: 1;
+      }
+
+      .quick-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .quick-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+      .about-grid,
+      .asheville-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .phases-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 180px;
+      }
+
+      .gallery-item.feature { grid-column: span 2; grid-row: span 1; }
+      .gallery-item.tall { grid-row: span 1; }
+
+      .dates-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .poster-item { width: 300px; }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .image-strip { height: 250px; }
+
+      .notes-row { gap: 1rem; }
+      .note-circle { width: 60px; height: 60px; font-size: 1.4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .quick-strip { grid-template-columns: 1fr; }
+      .phases-grid { grid-template-columns: 1fr; }
+      .dates-grid { grid-template-columns: 1fr; }
+      section { padding: 4rem 1.2rem; }
+    }
+
+    /* ========== KULTURVERMITTLER*INNEN ========== */
+    .vermittler {
+      background: white;
+      overflow: hidden;
+    }
+
+    .vermittler-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .vermittler-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .lang-card {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .lang-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-3px);
+    }
+
+    .lang-card .flag {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lang-card .lang {
+      font-family: 'Anton', sans-serif;
+      font-size: 1rem;
+      color: var(--dark);
+    }
+
+    .lang-card .role {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.2rem;
+    }
+
+    .vermittler-text p {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .fair-pay-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--cream);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--teal);
+      border: 1px solid var(--teal);
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .vermittler-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .vermittler-visual { order: -1; }
+    }
+
+    /* ========== SCIENCE ========== */
+    .science {
+      background: var(--dark);
+      color: white;
+      padding: 5rem 2rem;
+    }
+
+    .science .section-label { color: var(--cyan); }
+    .science .section-title { color: white; }
+
+    .research-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .research-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .research-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--teal);
+    }
+
+    .research-card .finding {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .research-card .source {
+      font-size: 0.75rem;
+      color: var(--cyan);
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .research-card .icon-top {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+      .research-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ========== LIGHTBOX ========== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="logo">JAM KREIS LINZ</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">Was</a></li>
+      <li><a href="#method">Methode</a></li>
+      <li><a href="#gallery">Galerie</a></li>
+      <li><a href="#asheville">Vorbild</a></li>
+      <li><a href="#dates">Termine</a></li>
+      <li><a href="#contact">Kontakt</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="img/44294a29226185.55e84d9d2b1b4.webp" alt="JAM KREIS LINZ — Drum Circle Community" loading="eager">
+    </div>
+    <div class="hero-content">
+      <div class="hero-subtitle">Offene Rhythmuskreise</div>
+      <h1 class="hero-title">JAM<br>KREIS<br>-LINZ</h1>
+      <div class="hero-tagline">Spielen, tanzen oder einfach da sein.</div>
+      <a href="#about" class="hero-cta">Erfahre mehr</a>
+    </div>
+    <div class="scroll-indicator"><span></span></div>
+  </section>
+
+  <!-- QUICK STRIP -->
+  <div class="quick-strip">
+    <div class="quick-card">
+      <div class="icon">&#x1F941;</div>
+      <h3>Was</h3>
+      <p>Offene Rhythmuskreise im&nbsp;Freien. Trommeln, Klang, Gemeinschaft.</p>
+    </div>
+    <div class="quick-card">
+      <div class="icon">&#x1F4C5;</div>
+      <h3>Wann</h3>
+      <p>Jeden letzten Samstag<br>14:00 &ndash; 17:30 Uhr</p>
+    </div>
+    <div class="quick-card">
+      <div class="icon">&#x1F3B5;</div>
+      <h3>Wer</h3>
+      <p>Alle. Keine Vorkenntnisse.<br>Keine gemeinsame Sprache n&ouml;tig.</p>
+    </div>
+    <div class="quick-card">
+      <div class="icon">&#x1F49B;</div>
+      <h3>Kosten</h3>
+      <p>Kostenlos.<br>Instrumente sind da.</p>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <div class="section-label">Die Idee</div>
+          <h2 class="section-title">Ein Kreis.<br>Viele Sprachen.<br><span class="accent">Ein Rhythmus.</span></h2>
+          <p>
+            Linz hat <span class="highlight">27.000+ Bewohner*innen mit nicht-deutscher Erstsprache</span> &mdash;
+            Rum&auml;nisch, BKS, T&uuml;rkisch, Arabisch, Dari, Ukrainisch und viele mehr.
+            Sie teilen den &ouml;ffentlichen Raum &mdash; aber begegnen sich kaum.
+          </p>
+          <p>
+            JAM KREIS LINZ bringt sie zusammen. Nicht als Publikum. Nicht als Darbietende.
+            Sondern als <span class="highlight">gleichberechtigte Mitgestaltende im selben Kreis</span>,
+            mit denselben Signalen, auf Augenh&ouml;he.
+          </p>
+          <p>
+            Die Methode: <strong>Arthur Hull Drum Circle Facilitation</strong> &mdash;
+            40 Jahre, 40+ L&auml;nder. Kein einziges gesprochenes Wort.
+            Nur Rhythmus und K&ouml;rpersignale.
+          </p>
+        </div>
+        <div class="about-image reveal">
+          <img src="img/c0a10329226185.55e84d9d25242.webp" alt="Hände auf der Trommel — Nahaufnahme" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE BREAK -->
+  <div class="quote-break">
+    <blockquote class="reveal">
+      &bdquo;Synchrones Rhythmusspiel l&ouml;st Oxytocin und Endorphine aus &mdash; dieselben Botenstoffe wie bei K&ouml;rperkontakt, ohne dessen Grenzen.&ldquo;
+    </blockquote>
+    <cite class="reveal">Tarr, Launay &amp; Dunbar, 2014 &mdash; Oxford University</cite>
+  </div>
+
+  <!-- SCIENCE -->
+  <section class="science">
+    <div class="container">
+      <div class="section-label reveal">Die Forschung</div>
+      <h2 class="section-title reveal">Warum es <span style="color:var(--cyan)">funktioniert.</span></h2>
+      <div class="research-cards">
+        <div class="research-card reveal">
+          <div class="icon-top">&#x1F9EC;</div>
+          <div class="finding">
+            Synchrones Rhythmusspiel l&ouml;st <strong>Oxytocin und Endorphine</strong> zwischen Fremden aus &mdash;
+            dieselben Botenstoffe wie bei K&ouml;rperkontakt, ohne dessen soziale Grenzen.
+          </div>
+          <div class="source">Tarr, Launay &amp; Dunbar, 2014 &mdash; Oxford University</div>
+        </div>
+        <div class="research-card reveal">
+          <div class="icon-top">&#x1F465;</div>
+          <div class="finding">
+            Ab <strong>15 gleichzeitig aktiven Teilnehmenden</strong> bleibt rund 40% der Vorbeigehenden stehen.
+            Der Kreis w&auml;chst sich selbst &mdash; ohne Werbung, ohne Einladung.
+          </div>
+          <div class="source">Milgram et al., 1969 &mdash; Sozialpsychologische Feldforschung</div>
+        </div>
+        <div class="research-card reveal">
+          <div class="icon-top">&#x1F91D;</div>
+          <div class="finding">
+            Partizipative Musikformate erzeugen messbare <strong>soziale Koh&auml;sion und interkulturelles Verst&auml;ndnis</strong>
+            &mdash; auch ohne gemeinsame Sprache.
+          </div>
+          <div class="source">Crooke, Thompson et al., 2024 &mdash; SAGE Journals</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE STRIP -->
+  <div class="image-strip">
+    <img src="img/ashevilledrumcircle_herohires.webp" alt="Drum Circle Panorama" id="parallaxImg1" loading="lazy">
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="method">
+    <div class="container">
+      <div class="section-label reveal">Die Methode</div>
+      <h2 class="section-title reveal">Vier Phasen.<br><span class="accent">Kein einziges Wort.</span></h2>
+      <div class="phases-grid">
+        <div class="phase-card reveal">
+          <div class="phase-number">1</div>
+          <div class="time">5&ndash;10 MIN</div>
+          <h3>Signal-Phase</h3>
+          <p>Einf&uuml;hrung der K&ouml;rpersignale durch Demonstration. Keine Erkl&auml;rung, keine &Uuml;bersetzung. Alle lernen gleichzeitig &mdash; durch Imitation.</p>
+        </div>
+        <div class="phase-card reveal">
+          <div class="phase-number">2</div>
+          <div class="time">~20 MIN</div>
+          <h3>Layer-Phase</h3>
+          <p>Schrittweise Einladung: Shaker &amp; Claves &rarr; Boomwhackers (farbkodiert) &rarr; Rahmentrommeln. Jede Schicht f&uuml;gt sich hinzu.</p>
+        </div>
+        <div class="phase-card reveal">
+          <div class="phase-number">3</div>
+          <div class="time">20&ndash;30 MIN</div>
+          <h3>Groove-Phase</h3>
+          <p>Der Facilitator formt Dynamik und Energie. Koh&auml;renz entsteht. Fremde werden ein Orchester &mdash; ohne Partitur.</p>
+        </div>
+        <div class="phase-card reveal">
+          <div class="phase-number">4</div>
+          <div class="time">~10 MIN</div>
+          <h3>Selbsttragung</h3>
+          <p>Der Facilitator tritt zur&uuml;ck. Die Gruppe h&auml;lt den Rhythmus eigenst&auml;ndig. Das ist der Moment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PENTATONIC -->
+  <section class="pentatonic">
+    <div class="container">
+      <h2 class="section-title reveal">Es gibt keinen<br>falschen Ton.</h2>
+      <div class="notes-row reveal">
+        <div class="note-circle" data-note="C">C</div>
+        <div class="note-circle" data-note="D">D</div>
+        <div class="note-circle" data-note="E">E</div>
+        <div class="note-circle" data-note="G">G</div>
+        <div class="note-circle" data-note="A">A</div>
+      </div>
+      <p class="pentatonic-desc reveal">
+        Alle Instrumente sind pentatonisch gestimmt &mdash;
+        jede Kombination gespielter T&ouml;ne klingt harmonisch.
+        <strong>Hemmung und Misserfolg sind strukturell ausgeschlossen.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-label reveal">Galerie</div>
+      <h2 class="section-title reveal">So sieht es <span class="accent" style="color:var(--pink)">aus.</span></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item feature" onclick="openLightbox(this)">
+        <img src="img/44294a29226185.55e84d9d2b1b4.webp" alt="Hunderte Menschen im Drum Circle — Luftaufnahme" loading="lazy">
+      </div>
+      <div class="gallery-item tall" onclick="openLightbox(this)">
+        <img src="img/9c2d5329226185.55e84d9d22867.webp" alt="H&auml;nde auf der Trommel — Nahaufnahme" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="img/drum-circle.webp" alt="Diverse Teilnehmende beim Trommeln" loading="lazy">
+      </div>
+      <div class="gallery-item wide" onclick="openLightbox(this)">
+        <img src="img/01-asheville-downtown-drum-circle-krista-rossow.webp" alt="Asheville Downtown Drum Circle" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="img/Asheville-Attractions-DrumCircle-WM-17.jpg" alt="Musiker beim Drum Circle — Cajon und Saxophon" loading="lazy">
+      </div>
+      <div class="gallery-item tall" onclick="openLightbox(this)">
+        <img src="img/c0a10329226185.55e84d9d25242.webp" alt="H&auml;nde auf Djembe — Nahaufnahme" loading="lazy">
+      </div>
+      <div class="gallery-item wide" onclick="openLightbox(this)">
+        <img src="img/images.jpeg" alt="Tanzende Menschen im Drum Circle" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="img/drum-circle.jpg" alt="Gro&szlig;er Drum Circle im Park" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ASHEVILLE -->
+  <section class="asheville" id="asheville">
+    <div class="container">
+      <div class="asheville-grid">
+        <div class="reveal">
+          <div class="section-label">Das Vorbild</div>
+          <h2 class="section-title">Asheville Drum Circle<br><span class="accent">25+ Jahre. Jeden Freitag.</span></h2>
+          <p style="font-family:'Lora',serif; font-size:1.1rem; line-height:1.8; margin-bottom:1.5rem;">
+            Pritchard Park, Asheville, North Carolina. Seit den sp&auml;ten 1990ern.
+            Begonnen mit einer Handvoll Musiker*innen nach Arthur Hulls Methode.
+            Heute: <strong>kulturelles Wahrzeichen</strong> der Stadt, fester Bestandteil der st&auml;dtischen Identit&auml;t.
+          </p>
+          <p style="font-family:'Lora',serif; font-size:1.1rem; line-height:1.8; margin-bottom:1.5rem;">
+            Ohne Eintritt. Ohne institutionellen Tr&auml;ger.
+            Der Facilitator hat sich l&auml;ngst zur&uuml;ckgezogen &mdash;
+            <strong>die Gemeinschaft h&auml;lt den Rhythmus seit &uuml;ber einem Vierteljahrhundert.</strong>
+          </p>
+          <p style="font-family:'Lora',serif; font-size:1.05rem; line-height:1.8; color: var(--teal); font-weight:600;">
+            JAM KREIS LINZ beantragt das erste Jahr. Asheville zeigt, was danach m&ouml;glich ist.
+          </p>
+          <div class="asheville-stats">
+            <div class="stat-box">
+              <div class="number">25+</div>
+              <div class="label">Jahre</div>
+            </div>
+            <div class="stat-box">
+              <div class="number">400</div>
+              <div class="label">Menschen / Freitag</div>
+            </div>
+            <div class="stat-box">
+              <div class="number">0&euro;</div>
+              <div class="label">Eintritt</div>
+            </div>
+            <div class="stat-box">
+              <div class="number">1</div>
+              <div class="label">Methode &mdash; weltweit bew&auml;hrt</div>
+            </div>
+          </div>
+        </div>
+        <div class="asheville-image reveal">
+          <img src="img/44294a29226185.55e84d9d2b1b4.webp" alt="Asheville Drum Circle — Luftaufnahme" loading="lazy">
+          <div class="asheville-badge">
+            <div class="loc">Pritchard Park, Asheville NC</div>
+            <div class="desc">Jeden Freitag seit ~1996 &mdash; Community-getragen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR EVERYONE -->
+  <section class="for-everyone">
+    <div class="container">
+      <div class="section-label reveal" style="color:rgba(255,255,255,0.6)">F&uuml;r wen?</div>
+      <h2 class="section-title reveal">F&uuml;r alle.</h2>
+      <p class="sub reveal">
+        Keine Vorkenntnisse. Keine gemeinsame Sprache n&ouml;tig.<br>
+        Nur Rhythmus und K&ouml;rpersignale.
+      </p>
+      <div class="audience-pills reveal">
+        <span class="pill">Musiker*innen</span>
+        <span class="pill">Familien mit Kindern</span>
+        <span class="pill">Neuzugezogene</span>
+        <span class="pill">Pensionist*innen</span>
+        <span class="pill">Tourist*innen</span>
+        <span class="pill">Nachbar*innen</span>
+        <span class="pill">Rum&auml;nisch</span>
+        <span class="pill">BKS</span>
+        <span class="pill">T&uuml;rkisch</span>
+        <span class="pill">Arabisch</span>
+        <span class="pill">Dari</span>
+        <span class="pill">Deutsch</span>
+        <span class="pill">Portugu&ecirc;s</span>
+        <span class="pill">Ukrainisch</span>
+        <span class="pill">...und du</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- KULTURVERMITTLER*INNEN -->
+  <section class="vermittler">
+    <div class="container">
+      <div class="vermittler-grid">
+        <div class="vermittler-text reveal">
+          <div class="section-label">Br&uuml;ckenbauer*innen</div>
+          <h2 class="section-title">Bezahlte<br><span class="accent">Kulturvermittler*innen.</span></h2>
+          <p>
+            Jede Session wird von bezahlten Kulturvermittler*innen aus f&uuml;nf Sprachcommunitys begleitet.
+            Sie mobilisieren &uuml;ber <strong>WhatsApp-Netzwerke, Moscheen, Beratungsstellen und MAIZ-R&auml;ume</strong> &mdash;
+            &uuml;berall dort, wo formale Einladungen nicht ankommen.
+          </p>
+          <p>
+            Sie werden f&uuml;r ihre Expertise bezahlt &mdash; Netzwerk, &Uuml;bersetzung, emotionale Vermittlungsleistung &mdash;
+            nicht f&uuml;r ihre Zugeh&ouml;rigkeit zu einer Gruppe.
+          </p>
+          <p>
+            Zus&auml;tzlich weisen sie Teilnehmende aktiv auf weiterf&uuml;hrende st&auml;dtische Angebote hin:
+            MAIZ, Integrationsb&uuml;ro, Caritas-Fl&uuml;chtlingsberatung. <strong>Der Kreis &ouml;ffnet die T&uuml;r &mdash;
+            die Kulturvermittler*in h&auml;lt sie auf.</strong>
+          </p>
+          <div class="fair-pay-badge">&#x2713; Fair Pay &mdash; IG Kultur &Ouml;sterreich</div>
+        </div>
+        <div class="vermittler-visual reveal">
+          <div class="lang-card">
+            <div class="flag">&#x1F1F7;&#x1F1F4;</div>
+            <div class="lang">Rum&auml;nisch</div>
+            <div class="role">Kulturvermittler*in</div>
+          </div>
+          <div class="lang-card">
+            <div class="flag">&#x1F1E7;&#x1F1E6;</div>
+            <div class="lang">BKS</div>
+            <div class="role">Kulturvermittler*in</div>
+          </div>
+          <div class="lang-card">
+            <div class="flag">&#x1F1F9;&#x1F1F7;</div>
+            <div class="lang">T&uuml;rkisch</div>
+            <div class="role">Kulturvermittler*in</div>
+          </div>
+          <div class="lang-card">
+            <div class="flag">&#x1F1F8;&#x1F1E6;</div>
+            <div class="lang">Arabisch</div>
+            <div class="role">Kulturvermittler*in</div>
+          </div>
+          <div class="lang-card">
+            <div class="flag">&#x1F1E6;&#x1F1EB;</div>
+            <div class="lang">Dari</div>
+            <div class="role">Kulturvermittler*in</div>
+          </div>
+          <div class="lang-card">
+            <div class="flag">&#x1F1FA;&#x1F1E6;</div>
+            <div class="lang">Ukrainisch</div>
+            <div class="role">Kulturvermittler*in</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSTER GALLERY -->
+  <section class="posters">
+    <div class="container">
+      <div class="section-label reveal">Visuelle Identit&auml;t</div>
+      <h2 class="section-title reveal">Die <span class="accent">Plakate.</span></h2>
+    </div>
+    <div class="poster-scroll">
+      <div class="poster-item"><img src="img/1.png" alt="JAM KREIS LINZ Poster 1" loading="lazy"></div>
+      <div class="poster-item"><img src="img/2.png" alt="JAM KREIS LINZ Poster 2" loading="lazy"></div>
+      <div class="poster-item"><img src="img/3.png" alt="JAM KREIS LINZ Poster 3" loading="lazy"></div>
+      <div class="poster-item"><img src="img/4.png" alt="JAM KREIS LINZ Poster 4" loading="lazy"></div>
+      <div class="poster-item"><img src="img/5.png" alt="JAM KREIS LINZ Poster 5" loading="lazy"></div>
+      <div class="poster-item"><img src="img/6.png" alt="JAM KREIS LINZ Poster 6" loading="lazy"></div>
+    </div>
+  </section>
+
+  <!-- DATES -->
+  <section class="dates" id="dates">
+    <div class="container">
+      <div class="section-label reveal">Termine 2026</div>
+      <h2 class="section-title reveal">Jeden letzten<br><span style="color:var(--yellow)">Samstag.</span></h2>
+      <div class="dates-grid">
+        <div class="date-card next reveal">
+          <div class="month">Mai</div>
+          <div class="day">30</div>
+          <div class="info">14:00 &ndash; 17:30 Uhr</div>
+          <div class="badge">Auftakt + Shaker-Workshop</div>
+        </div>
+        <div class="date-card reveal">
+          <div class="month">Juni</div>
+          <div class="day">27</div>
+          <div class="info">14:00 &ndash; 17:30 Uhr</div>
+        </div>
+        <div class="date-card reveal">
+          <div class="month">Juli</div>
+          <div class="day">25</div>
+          <div class="info">14:00 &ndash; 17:30 Uhr</div>
+        </div>
+        <div class="date-card reveal">
+          <div class="month">August</div>
+          <div class="day">29</div>
+          <div class="info">14:00 &ndash; 17:30 Uhr</div>
+        </div>
+        <div class="date-card reveal">
+          <div class="month">September</div>
+          <div class="day">26</div>
+          <div class="info">14:00 &ndash; 17:30 Uhr</div>
+        </div>
+        <div class="date-card reveal">
+          <div class="month">Oktober</div>
+          <div class="day">31</div>
+          <div class="info">14:00 &ndash; 17:30 Uhr</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">JAM KREIS LINZ</div>
+        <p>
+          Ein Projekt von Rafael Garcia Vaz de Lima.
+          Partizipative Rhythmuskreise f&uuml;r die mehrsprachige Stadtgesellschaft.
+          Eingereicht bei Stadt der Vielfalt 2026 &mdash; Kategorie Interkulturalit&auml;t.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <a href="mailto:rafaelwabisabi@gmail.com">rafaelwabisabi@gmail.com</a>
+        <a href="tel:+4367761548145">+43 677 61548145</a>
+        <a href="https://www.jamkreislinz.at">www.jamkreislinz.at</a>
+      </div>
+      <div class="footer-col">
+        <h4>Partner</h4>
+        <a href="https://maiz.at" target="_blank" rel="noopener">MAIZ Linz</a>
+        <a href="#">Integrationsbüro Stadt Linz</a>
+        <a href="#">Stadt der Vielfalt</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 JAM KREIS LINZ</span>
+      <div class="partner-logos">
+        <span>MAIZ Linz</span>
+        <span>Stadt der Vielfalt</span>
+        <span>Stadt Linz</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" aria-label="Schlie&szlig;en">&times;</button>
+    <img src="" alt="" id="lightboxImg">
+  </div>
+
+  <script>
+    // ===== NAV SCROLL =====
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 100);
+    });
+
+    // ===== MOBILE NAV =====
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ===== REVEAL ON SCROLL =====
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ===== FLOWING LINE ANIMATION =====
+    const flowingLines = document.querySelectorAll('.flowing-line');
+    const lineObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.3 });
+    flowingLines.forEach(el => lineObserver.observe(el));
+
+    // ===== LIGHTBOX =====
+    function openLightbox(el) {
+      const img = el.querySelector('img');
+      document.getElementById('lightboxImg').src = img.src;
+      document.getElementById('lightboxImg').alt = img.alt;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // ===== PARALLAX (subtle) =====
+    const parallaxImg = document.getElementById('parallaxImg1');
+    if (parallaxImg) {
+      window.addEventListener('scroll', () => {
+        const rect = parallaxImg.parentElement.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+          parallaxImg.style.transform = `translateY(${(progress - 0.5) * 60}px)`;
+        }
+      });
+    }
+
+    // ===== NOTE CIRCLES INTERACTION =====
+    const noteFreqs = { C: 261.63, D: 293.66, E: 329.63, G: 392.00, A: 440.00 };
+    let audioCtx;
+
+    document.querySelectorAll('.note-circle').forEach(circle => {
+      circle.addEventListener('click', () => {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const note = circle.dataset.note;
+        const freq = noteFreqs[note];
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.2);
+
+        circle.style.transform = 'scale(1.2) rotate(-5deg)';
+        circle.style.background = 'var(--teal)';
+        circle.style.color = 'white';
+        setTimeout(() => {
+          circle.style.transform = '';
+          circle.style.background = '';
+          circle.style.color = '';
+        }, 600);
+      });
+    });
+
+    // ===== STAGGERED REVEALS =====
+    document.querySelectorAll('.phases-grid .phase-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.15}s`;
+    });
+    document.querySelectorAll('.dates-grid .date-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+    });
+    document.querySelectorAll('.audience-pills .pill').forEach((pill, i) => {
+      pill.style.opacity = '0';
+      pill.style.transform = 'translateY(10px)';
+      pill.style.transition = `all 0.4s ease ${i * 0.05}s`;
+    });
+
+    const pillObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.pill').forEach(pill => {
+            pill.style.opacity = '1';
+            pill.style.transform = 'translateY(0)';
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    const pillContainer = document.querySelector('.audience-pills');
+    if (pillContainer) pillObserver.observe(pillContainer);
+  </script>
+
+</body>
+</html>
