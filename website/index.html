@@ -775,6 +775,137 @@
       text-transform: uppercase;
     }
 
+    /* ========== PILOT EVENT CARD ========== */
+    .date-card.pilot-card {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      border-color: var(--teal);
+      background: rgba(61, 184, 165, 0.12);
+      text-align: left;
+      flex-wrap: wrap;
+    }
+
+    .pilot-card .pilot-left { flex: 1; }
+    .pilot-card .pilot-badge {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--dark);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 50px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .pilot-card .pilot-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.6rem;
+      color: var(--yellow);
+      line-height: 1.1;
+    }
+
+    .pilot-card .pilot-sub {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-top: 0.3rem;
+    }
+
+    .pilot-card .pilot-right {
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .pilot-card .pilot-right .month {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.2rem;
+      color: var(--teal);
+    }
+
+    .pilot-card .pilot-right .day {
+      font-family: 'Anton', sans-serif;
+      font-size: 3.5rem;
+      color: white;
+      line-height: 1;
+    }
+
+    .pilot-card .pilot-right .time {
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    /* ========== FLOATING EVENT BOOKMARK ========== */
+    .floating-event {
+      position: fixed;
+      bottom: 2rem;
+      right: 1.5rem;
+      z-index: 999;
+      background: var(--dark);
+      color: white;
+      border-radius: 14px;
+      padding: 1rem 2rem 1rem 1.2rem;
+      border: 2px solid var(--teal);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      max-width: 210px;
+      animation: floatIn 0.6s cubic-bezier(0.22,1,0.36,1) 1.2s both;
+      cursor: default;
+    }
+
+    @keyframes floatIn {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .floating-event-tag {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .floating-event-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.05rem;
+      color: var(--yellow);
+      line-height: 1.1;
+    }
+
+    .floating-event-date {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+      margin-top: 0.25rem;
+    }
+
+    .floating-event-sub {
+      font-size: 0.68rem;
+      opacity: 0.55;
+      margin-top: 0.15rem;
+      line-height: 1.3;
+    }
+
+    .floating-event-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.7rem;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.35);
+      font-size: 1.1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .floating-event-close:hover { color: white; }
+
     /* ========== FOR EVERYONE ========== */
     .for-everyone {
       background: var(--teal);
@@ -1090,9 +1221,250 @@
       margin-top: 0.5rem;
     }
 
+    /* EXPANDED KV SECTION */
+    .kv-phases {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .kv-phase {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 1.5rem 1.2rem;
+      border-top: 4px solid var(--teal);
+      position: relative;
+    }
+
+    .kv-phase.phase-before { border-top-color: #3db8a5; }
+    .kv-phase.phase-during { border-top-color: #f5e340; }
+    .kv-phase.phase-after  { border-top-color: #e87d3e; }
+
+    .kv-phase-label {
+      font-family: 'Anton', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 0.4rem;
+    }
+
+    .kv-phase-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+
+    .kv-phase ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .kv-phase ul li {
+      font-family: 'Lora', serif;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #444;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .kv-phase ul li:last-child { border-bottom: none; }
+
+    .kv-phase ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-size: 0.75rem;
+    }
+
+    .kv-phase.phase-during ul li::before { color: #c4a800; }
+    .kv-phase.phase-after ul li::before  { color: #e87d3e; }
+
+    /* SHADOWING PROGRAM */
+    .kv-shadowing {
+      background: var(--dark);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .kv-shadowing-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .kv-shadowing-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .kv-shadowing-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.6rem;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .kv-shadowing-subtitle {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    .kv-shadowing-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .kv-shadowing-steps::before {
+      content: '';
+      position: absolute;
+      top: 1.8rem;
+      left: 2rem;
+      right: 2rem;
+      height: 2px;
+      background: linear-gradient(to right, var(--teal), var(--yellow));
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .kv-step {
+      position: relative;
+      z-index: 1;
+    }
+
+    .kv-step-num {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      background: var(--teal);
+      color: var(--dark);
+      font-family: 'Anton', sans-serif;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      border: 3px solid rgba(255,255,255,0.15);
+    }
+
+    .kv-step:nth-child(2) .kv-step-num { background: #6dcfc0; }
+    .kv-step:nth-child(3) .kv-step-num { background: #f5e340; }
+    .kv-step:nth-child(4) .kv-step-num { background: white; }
+
+    .kv-step-label {
+      font-family: 'Anton', sans-serif;
+      font-size: 0.85rem;
+      color: white;
+      margin-bottom: 0.4rem;
+    }
+
+    .kv-step-desc {
+      font-family: 'Lora', serif;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.5;
+    }
+
+    /* BOTTOM BLOCKS */
+    .kv-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .kv-block {
+      border-radius: 14px;
+      padding: 2rem;
+    }
+
+    .kv-block-fairpay {
+      background: #1a1a2e;
+      color: white;
+    }
+
+    .kv-block-bridge {
+      background: var(--cream);
+    }
+
+    .kv-block-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .kv-block-fairpay .kv-block-title { color: var(--yellow); }
+    .kv-block-bridge .kv-block-title   { color: var(--dark); }
+
+    .kv-block p {
+      font-family: 'Lora', serif;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 1rem;
+    }
+
+    .kv-block-bridge p {
+      color: #555;
+    }
+
+    .kv-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .kv-service-tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      background: white;
+      color: var(--dark);
+      border: 1px solid #ddd;
+    }
+
+    .kv-fairpay-quote {
+      font-family: 'Anton', sans-serif;
+      font-size: 1rem;
+      color: var(--teal);
+      border-left: 3px solid var(--teal);
+      padding-left: 1rem;
+      margin-top: 1rem;
+      line-height: 1.4;
+    }
+
+    /* LANG CARDS ENHANCED */
+    .lang-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
     @media (max-width: 768px) {
       .vermittler-grid { grid-template-columns: 1fr; gap: 2rem; }
       .vermittler-visual { order: -1; }
+      .kv-phases { grid-template-columns: 1fr; }
+      .kv-shadowing-steps { grid-template-columns: 1fr 1fr; }
+      .kv-shadowing-steps::before { display: none; }
+      .kv-bottom { grid-template-columns: 1fr; }
+      .lang-cards-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ========== SCIENCE ========== */
@@ -1489,59 +1861,204 @@
   <!-- KULTURVERMITTLER*INNEN -->
   <section class="vermittler">
     <div class="container">
+
+      <!-- OPENING BLOCK -->
       <div class="vermittler-grid">
         <div class="vermittler-text reveal">
           <div class="section-label">Br&uuml;ckenbauer*innen</div>
           <h2 class="section-title">Bezahlte<br><span class="accent">Kulturvermittler*innen.</span></h2>
           <p>
-            Jede Session wird von bezahlten Kulturvermittler*innen aus f&uuml;nf Sprachcommunitys begleitet.
-            Sie mobilisieren &uuml;ber <strong>WhatsApp-Netzwerke, Moscheen, Beratungsstellen und MAIZ-R&auml;ume</strong> &mdash;
-            &uuml;berall dort, wo formale Einladungen nicht ankommen.
+            Wer nicht eingeladen wird, kommt nicht. Das ist kein Desinteresse &mdash; das ist eine Frage der Kan&auml;le.
+            Ein Flyer an einem schwarzen Brett erreicht nicht jene Menschen, die nie dort vorbeigehen.
+            Eine Instagram-Story auf Deutsch spricht nicht jene an, die ihren Alltag auf Rum&auml;nisch, T&uuml;rkisch oder Dari leben.
           </p>
           <p>
-            Sie werden f&uuml;r ihre Expertise bezahlt &mdash; Netzwerk, &Uuml;bersetzung, emotionale Vermittlungsleistung &mdash;
-            nicht f&uuml;r ihre Zugeh&ouml;rigkeit zu einer Gruppe.
+            JAM KREIS LINZ l&ouml;st dieses strukturelle Problem mit einem einfachen, radikalen Ansatz:
+            <strong>Wir bezahlen Menschen aus den Communitys selbst daf&uuml;r, das Projekt in ihre Netzwerke zu tragen.</strong>
+            Nicht als Gegenleistung f&uuml;r ihre Zugeh&ouml;rigkeit &mdash; sondern f&uuml;r ihre Expertise.
+            Ihr Netzwerk, ihre Sprache, ihr Vertrauen. Das ist professionelle Arbeit. Sie wird professionell entlohnt.
           </p>
           <p>
-            Zus&auml;tzlich weisen sie Teilnehmende aktiv auf weiterf&uuml;hrende st&auml;dtische Angebote hin:
-            MAIZ, Integrationsb&uuml;ro, Caritas-Fl&uuml;chtlingsberatung. <strong>Der Kreis &ouml;ffnet die T&uuml;r &mdash;
-            die Kulturvermittler*in h&auml;lt sie auf.</strong>
+            <strong>Der Kreis &ouml;ffnet die T&uuml;r &mdash; die Kulturvermittler*in h&auml;lt sie auf.</strong>
           </p>
           <div class="fair-pay-badge">&#x2713; Fair Pay &mdash; IG Kultur &Ouml;sterreich</div>
         </div>
-        <div class="vermittler-visual reveal">
+        <div class="vermittler-visual reveal" style="display:flex; flex-direction:column; justify-content:center; gap:1.2rem;">
+          <div style="background:var(--cream); border-radius:14px; padding:1.8rem; border-left:4px solid var(--teal);">
+            <div style="font-family:'Anton',sans-serif; font-size:0.65rem; letter-spacing:0.12em; color:#999; text-transform:uppercase; margin-bottom:0.6rem;">Das Problem</div>
+            <p style="font-family:'Lora',serif; font-size:0.95rem; line-height:1.65; color:#555; margin:0;">
+              Formale Einladungen &mdash; Plakate, Pressemitteilungen, Social Media auf Deutsch &mdash; erreichen
+              migrantische Communitys systematisch <em>nicht</em>. Das Ergebnis: &ouml;ffentlich gef&ouml;rderte Projekte
+              k&ouml;nnen zuhause nirgends anklopfen.
+            </p>
+          </div>
+          <div style="background:var(--dark); border-radius:14px; padding:1.8rem; border-left:4px solid var(--yellow);">
+            <div style="font-family:'Anton',sans-serif; font-size:0.65rem; letter-spacing:0.12em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:0.6rem;">Die L&ouml;sung</div>
+            <p style="font-family:'Lora',serif; font-size:0.95rem; line-height:1.65; color:rgba(255,255,255,0.75); margin:0;">
+              Wir bauen keine Br&uuml;cke <em>zu</em> den Communitys. Wir bezahlen die Menschen <em>aus</em> den
+              Communitys, die Br&uuml;cke selbst zu sein &mdash; weil sie das bereits jeden Tag tun.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 PHASEN -->
+      <div class="reveal" style="margin-top:1rem;">
+        <div style="font-family:'Anton',sans-serif; font-size:0.7rem; letter-spacing:0.15em; color:#999; text-transform:uppercase; margin-bottom:1.2rem;">Ihre Arbeit &mdash; in drei Phasen</div>
+        <div class="kv-phases">
+          <div class="kv-phase phase-before">
+            <div class="kv-phase-label">Phase 1</div>
+            <div class="kv-phase-title">Vor der Session</div>
+            <ul>
+              <li>Ank&uuml;ndigung in WhatsApp-Gruppen der Community (bis zu 1.000 Mitglieder)</li>
+              <li>Pers&ouml;nliche Einladung in Moscheen, Beratungsstellen, MAIZ-R&auml;umen</li>
+              <li>R&uuml;ckmeldung an JAM KREIS &uuml;ber Bedenken, Fragen, Barrieren der Community</li>
+              <li>Koordination von Mitfahrgelegenheiten oder gemeinsamer Anreise</li>
+              <li>Erkl&auml;ren, was ein Trommelkreis ist &mdash; in der Muttersprache, ohne Jargon</li>
+            </ul>
+          </div>
+          <div class="kv-phase phase-during">
+            <div class="kv-phase-label">Phase 2</div>
+            <div class="kv-phase-title">W&auml;hrend der Session</div>
+            <ul>
+              <li>Empfang neuer Teilnehmender in ihrer Sprache, Orientierung geben</li>
+              <li>Simultane &Uuml;bersetzung von Facilitation-Signalen (nonverbal, aber kontextuell)</li>
+              <li>Niederschwellige Begleitung von &auml;ngstlichen oder zur&uuml;ckhaltenden Personen</li>
+              <li>Kulturelle Moderation bei Missverst&auml;ndnissen oder Unsicherheiten</li>
+              <li>Dokumentation: Fotos, kurze Notizen f&uuml;r die Evaluation</li>
+            </ul>
+          </div>
+          <div class="kv-phase phase-after">
+            <div class="kv-phase-label">Phase 3</div>
+            <div class="kv-phase-title">Nach der Session</div>
+            <ul>
+              <li>Nachbericht an die Community: Stimmung, Reaktionen, erste Eindr&uuml;cke</li>
+              <li>Aktiver Verweis auf weiterf&uuml;hrende st&auml;dtische Angebote</li>
+              <li>Teilnahme an Reflexionsgespr&auml;ch mit dem Projektteam</li>
+              <li>Feedback-Schleife: Was hat funktioniert? Was hat gefehlt?</li>
+              <li>Aufbau eines wachsenden Teilnehmer*innen-Stamms f&uuml;r n&auml;chste Sessions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FACILITATOR SHADOWING PROGRAM -->
+      <div class="kv-shadowing reveal">
+        <div class="kv-shadowing-header">
+          <div class="kv-shadowing-icon">&#x1F941;</div>
+          <div>
+            <div class="kv-shadowing-title">Facilitator Shadowing Program</div>
+            <div class="kv-shadowing-subtitle">
+              Kulturvermittler*innen bleiben nicht f&uuml;r immer im Hintergrund. Wer will, wird selbst Facilitatorin.
+              Session f&uuml;r Session, Schritt f&uuml;r Schritt &mdash; bis der Kreis gef&uuml;hrt werden kann,
+              ohne dass Rafael im Raum sein muss.
+            </div>
+          </div>
+        </div>
+        <div class="kv-shadowing-steps">
+          <div class="kv-step">
+            <div class="kv-step-num">1</div>
+            <div class="kv-step-label">Beobachten</div>
+            <div class="kv-step-desc">Sessions 1&ndash;3: Teilnehmen, beobachten, verstehen wie der Kreis funktioniert. Nonverbale Signale kennenlernen.</div>
+          </div>
+          <div class="kv-step">
+            <div class="kv-step-num">2</div>
+            <div class="kv-step-label">Unterst&uuml;tzen</div>
+            <div class="kv-step-desc">Sessions 4&ndash;6: Aktive Begleitung neuer Teilnehmender. Erste eigene Moderation kleiner Gruppen. Feedback-Gespr&auml;che.</div>
+          </div>
+          <div class="kv-step">
+            <div class="kv-step-num">3</div>
+            <div class="kv-step-label">Co-Facilitieren</div>
+            <div class="kv-step-desc">Sessions 7&ndash;9: Gemeinsame Leitung. Eigene K&ouml;rpersignale entwickeln. Verantwortung f&uuml;r Teilbereiche &uuml;bernehmen.</div>
+          </div>
+          <div class="kv-step">
+            <div class="kv-step-num">4</div>
+            <div class="kv-step-label">Eigenst&auml;ndig</div>
+            <div class="kv-step-desc">Ab Session 10+: F&uuml;hrt eigene Kreise. Wird Mitglied des Vereins JAM KREIS. Tr&auml;gt das Format in ihre Community.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAIR PAY + CITY BRIDGE -->
+      <div class="kv-bottom reveal">
+        <div class="kv-block kv-block-fairpay">
+          <div class="kv-block-title">Fair Pay &mdash; eine politische Haltung</div>
+          <p>
+            Es gibt Projekte, die Migrant*innen als Zielgruppe behandeln &mdash; und Projekte, die sie als Expertinnen
+            bezahlen. JAM KREIS LINZ ist das zweite.
+          </p>
+          <p>
+            Kulturvermittler*innen werden nach den Richtlinien der <strong>IG Kultur &Ouml;sterreich</strong> entlohnt.
+            Nicht weil es vorgeschrieben ist &mdash; sondern weil ihre Arbeit professionell, unverzichtbar und
+            anspruchsvoll ist. Wir machen damit sichtbar, was oft unsichtbar bleibt: dass Community-Arbeit Arbeit ist.
+          </p>
+          <div class="kv-fairpay-quote">
+            &bdquo;Wir bezahlen f&uuml;r Netzwerk, &Uuml;bersetzung und emotionale Vermittlungsleistung &mdash; nicht f&uuml;r Zugeh&ouml;rigkeit zu einer Gruppe.&ldquo;
+          </div>
+        </div>
+        <div class="kv-block kv-block-bridge">
+          <div class="kv-block-title">Br&uuml;cke zu st&auml;dtischen Angeboten</div>
+          <p>
+            Kulturvermittler*innen kennen die Angebote der Stadt &mdash; und sie kennen die Menschen, die diese
+            Angebote nicht kennen. Nach jeder Session weisen sie aktiv auf weiterf&uuml;hrende Strukturen hin:
+            niederschwellig, in der Muttersprache, pers&ouml;nlich.
+          </p>
+          <p>
+            Der Kreis ist kein Endpunkt &mdash; er ist ein Eingang.
+          </p>
+          <div class="kv-services">
+            <span class="kv-service-tag">&#x1F3DB; Integrationsb&uuml;ro Linz</span>
+            <span class="kv-service-tag">&#x1F91D; MAIZ</span>
+            <span class="kv-service-tag">&#x2764; Caritas Fl&uuml;chtlingsberatung</span>
+            <span class="kv-service-tag">&#x1F4DA; Bildungsberatung</span>
+            <span class="kv-service-tag">&#x2696; migrare</span>
+            <span class="kv-service-tag">&#x1F4CB; Dolmetschpool Linz</span>
+            <span class="kv-service-tag">&#x1F3E0; Volkshilfe OÖ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LANGUAGE COMMUNITIES -->
+      <div class="reveal" style="margin-top:2.5rem;">
+        <div style="font-family:'Anton',sans-serif; font-size:0.7rem; letter-spacing:0.15em; color:#999; text-transform:uppercase; margin-bottom:1.2rem;">Die sechs Sprachcommunitys</div>
+        <div class="lang-cards-grid">
           <div class="lang-card">
             <div class="flag">&#x1F1F7;&#x1F1F4;</div>
             <div class="lang">Rum&auml;nisch</div>
-            <div class="role">Kulturvermittler*in</div>
+            <div class="role">Kulturvermittler*in &mdash; gesucht</div>
           </div>
           <div class="lang-card">
             <div class="flag">&#x1F1E7;&#x1F1E6;</div>
             <div class="lang">BKS</div>
-            <div class="role">Kulturvermittler*in</div>
+            <div class="role">Kulturvermittler*in &mdash; gesucht</div>
           </div>
           <div class="lang-card">
             <div class="flag">&#x1F1F9;&#x1F1F7;</div>
             <div class="lang">T&uuml;rkisch</div>
-            <div class="role">Kulturvermittler*in</div>
+            <div class="role">Kulturvermittler*in &mdash; gesucht</div>
           </div>
           <div class="lang-card">
             <div class="flag">&#x1F1F8;&#x1F1E6;</div>
             <div class="lang">Arabisch</div>
-            <div class="role">Kulturvermittler*in</div>
+            <div class="role">Kulturvermittler*in &mdash; gesucht</div>
           </div>
           <div class="lang-card">
             <div class="flag">&#x1F1E6;&#x1F1EB;</div>
             <div class="lang">Dari</div>
-            <div class="role">Kulturvermittler*in</div>
+            <div class="role">Kulturvermittler*in &mdash; gesucht</div>
           </div>
           <div class="lang-card">
             <div class="flag">&#x1F1FA;&#x1F1E6;</div>
             <div class="lang">Ukrainisch</div>
-            <div class="role">Kulturvermittler*in</div>
+            <div class="role">Kulturvermittler*in &mdash; gesucht</div>
           </div>
         </div>
+        <p style="font-family:'Lora',serif; font-size:0.88rem; color:#888; margin-top:1.2rem; text-align:center;">
+          Du lebst in Linz, hast Wurzeln in einer dieser Communitys &mdash; und willst diese Arbeit machen?
+          <a href="#contact" style="color:var(--teal); font-weight:600;">Schreib uns.</a>
+        </p>
       </div>
+
     </div>
   </section>
 
@@ -1567,6 +2084,21 @@
       <div class="section-label reveal">Termine 2026</div>
       <h2 class="section-title reveal">Jeden letzten<br><span style="color:var(--yellow)">Samstag.</span></h2>
       <div class="dates-grid">
+
+        <!-- PILOT EVENT -->
+        <div class="date-card pilot-card reveal">
+          <div class="pilot-left">
+            <div class="pilot-badge">⭐ Pilot Event</div>
+            <div class="pilot-title">Woche der Vielfalt<br>Stadteilzentrumsfest Auwiesen</div>
+            <div class="pilot-sub">Eingeladen vom Integrationsbüro Linz &mdash; erster öffentlicher Auftritt von JAM KREIS</div>
+          </div>
+          <div class="pilot-right">
+            <div class="month">Mai</div>
+            <div class="day">22</div>
+            <div class="time">Nachmittags &mdash; TBA</div>
+          </div>
+        </div>
+
         <div class="date-card next reveal">
           <div class="month">Mai</div>
           <div class="day">30</div>
@@ -1767,6 +2299,15 @@
     const pillContainer = document.querySelector('.audience-pills');
     if (pillContainer) pillObserver.observe(pillContainer);
   </script>
+
+  <!-- FLOATING PILOT EVENT BOOKMARK -->
+  <div class="floating-event" id="floatingEvent">
+    <button class="floating-event-close" onclick="document.getElementById('floatingEvent').style.display='none'" title="Schließen">×</button>
+    <div class="floating-event-tag">⭐ Pilot Event</div>
+    <div class="floating-event-title">Woche der Vielfalt</div>
+    <div class="floating-event-date">22. Mai 2026</div>
+    <div class="floating-event-sub">Stadteilzentrumsfest Auwiesen<br>Eingeladen vom Integrationsbüro Linz</div>
+  </div>
 
 </body>
 </html>
