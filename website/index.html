@@ -762,6 +762,12 @@
       opacity: 0.6;
     }
 
+    .date-location {
+      font-size: 0.75rem;
+      opacity: 0.55;
+      margin-top: 0.5rem;
+    }
+
     .date-card .badge {
       display: inline-block;
       background: var(--pink);
@@ -841,8 +847,8 @@
     /* ========== FLOATING EVENT BOOKMARK ========== */
     .floating-event {
       position: fixed;
-      bottom: 2rem;
-      right: 1.5rem;
+      top: 72px;
+      right: 1.2rem;
       z-index: 999;
       background: var(--dark);
       color: white;
@@ -2085,25 +2091,12 @@
       <h2 class="section-title reveal">Jeden letzten<br><span style="color:var(--yellow)">Samstag.</span></h2>
       <div class="dates-grid">
 
-        <!-- PILOT EVENT -->
-        <div class="date-card pilot-card reveal">
-          <div class="pilot-left">
-            <div class="pilot-badge">⭐ Pilot Event</div>
-            <div class="pilot-title">Woche der Vielfalt<br>Stadteilzentrumsfest Auwiesen</div>
-            <div class="pilot-sub">Eingeladen vom Integrationsbüro Linz &mdash; erster öffentlicher Auftritt von JAM KREIS</div>
-          </div>
-          <div class="pilot-right">
-            <div class="month">Mai</div>
-            <div class="day">22</div>
-            <div class="time">Nachmittags &mdash; TBA</div>
-          </div>
-        </div>
-
         <div class="date-card next reveal">
           <div class="month">Mai</div>
-          <div class="day">30</div>
-          <div class="info">14:00 &ndash; 17:30 Uhr</div>
-          <div class="badge">Auftakt + Shaker-Workshop</div>
+          <div class="day">22</div>
+          <div class="info">Nachmittags &mdash; Uhrzeit folgt</div>
+          <div class="badge">⭐ Pilot — Woche der Vielfalt</div>
+          <div class="date-location">📍 Stadtteilzentrum Auwiesen, Linz</div>
         </div>
         <div class="date-card reveal">
           <div class="month">Juni</div>
@@ -2303,10 +2296,10 @@
   <!-- FLOATING PILOT EVENT BOOKMARK -->
   <div class="floating-event" id="floatingEvent">
     <button class="floating-event-close" onclick="document.getElementById('floatingEvent').style.display='none'" title="Schließen">×</button>
-    <div class="floating-event-tag">⭐ Pilot Event</div>
-    <div class="floating-event-title">Woche der Vielfalt</div>
-    <div class="floating-event-date">22. Mai 2026</div>
-    <div class="floating-event-sub">Stadteilzentrumsfest Auwiesen<br>Eingeladen vom Integrationsbüro Linz</div>
+    <div class="floating-event-tag">🥁 Nächstes Treffen</div>
+    <div class="floating-event-title">22. Mai 2026</div>
+    <div class="floating-event-date">Woche der Vielfalt</div>
+    <div class="floating-event-sub">📍 Stadtteilzentrum Auwiesen<br>Komm dazu — alle willkommen!</div>
   </div>
 
 </body>
